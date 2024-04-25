@@ -1,0 +1,31 @@
+<div class="loom-outer">
+    <svg:svg class="loom">
+
+        <!--This rect is just for user interaction via panning-->
+        <svg:g>
+            <svg:rect class="panning-rect" [attr.width]="width()" [attr.height]="height()"
+                (mousedown)="isPanning = true" />
+        </svg:g>
+
+
+        <svg:g class="loom">
+            <defs>
+                <ng-container *ngIf="defsTemplate" [ngTemplateOutlet]="defsTemplate" />
+                <svg:path class="text-path" *ngFor="let edge of graph.edges" [attr.d]="edge.textPath"
+                    [attr.id]="edge.id" />
+            </defs>
+
+            <ng-content />
+
+            <!--Handles all the edges between nodes-->
+            <svg:g class="edges">
+
+            </svg:g>
+
+            <!--Handles all the nodes-->
+            <svg:g class="nodes">
+
+            </svg:g>
+        </svg:g>
+    </svg:svg>
+</div>
