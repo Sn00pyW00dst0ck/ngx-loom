@@ -15,7 +15,7 @@ export class Node {
     /**
      * The width and height for this node. 
      */
-    public dimension: { w: number, h: number } = { w: 0, h: 0 };
+    public dimension: { w: number, h: number } = { w: 20, h: 20 };
     /**
      * The text label for this node. 
      */

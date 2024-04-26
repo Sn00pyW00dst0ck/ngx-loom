@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoomComponent } from 'ngx-loom';
+import { LoomComponent, Node, Edge } from 'ngx-loom';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +11,7 @@ import { LoomComponent } from 'ngx-loom';
 })
 export class AppComponent {
   title = 'loom-demo';
+
+  nodes: Node[] = [new Node()];
+  edges: Edge[] = [];
 }

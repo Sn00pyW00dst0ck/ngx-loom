@@ -8,7 +8,7 @@
                 (mousedown)="isPanning = true" />
         </svg:g>
 
-        <svg:g class="loom">
+        <svg:g [attr.transform]="transform()">
             <defs>
                 <ng-container *ngIf="defsTemplate" [ngTemplateOutlet]="defsTemplate" />
                 @for (edge of edges(); track edge.id) {

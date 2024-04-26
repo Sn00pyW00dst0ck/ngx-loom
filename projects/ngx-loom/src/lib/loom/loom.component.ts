@@ -48,6 +48,10 @@ export class LoomComponent {
      */
     protected isPanning: boolean = false;
 
+
+    protected zoomLevel = signal<number>(1);
+
+
     /**
      * The dimensions of the graph within the loom. Necessary because the graph will not be the same size as the DOM container.
      */
@@ -83,7 +87,8 @@ export class LoomComponent {
      * 
      */
     constructor() {
-
+        // TODO: Setup a bunch of effects here...
+        this.initialized = true;
     }
 
     //#region DOM Interaction
@@ -96,7 +101,7 @@ export class LoomComponent {
     @HostListener('document:mousemove', ['$event'])
     private onMouseMove = ($event: MouseEvent): void => {
         if (this.isPanning) {
-            // CALL PANNING FUNCTION
+            this.pan($event.movementX, $event.movementY);
         }
     }
 
@@ -142,6 +147,8 @@ export class LoomComponent {
             return;
         }
 
+        const zoomLevel = ignoreZoomLevel ? 1 : this.zoomLevel();
+        this.transformationMatrix.set(transform(this.transformationMatrix(), translate(x / zoomLevel, y / zoomLevel)));
     }
 
     /**
@@ -156,6 +163,13 @@ export class LoomComponent {
             return;
         }
 
+        const panX = -this.transformationMatrix().e - x * this.zoomLevel() + this.DOMDimensions().w / 2;
+        const panY = -this.transformationMatrix().f - y * this.zoomLevel() + this.DOMDimensions().h / 2;
+
+        this.transformationMatrix.set(transform(
+            this.transformationMatrix(),
+            translate(panX / this.zoomLevel(), panY / this.zoomLevel())
+        ));
     }
 
     /**
@@ -163,7 +177,7 @@ export class LoomComponent {
      * 
      * @param { string } id the id of the Node to pan to. 
      */
-    private panToNode = (id: string): void => {
+    public panToNode = (id: string): void => {
         const node = this.nodes().find((node: Node) => node.id === id);
         if (!node || !node.position) { return; }
         this.panTo(node.position.x, node.position.y);
