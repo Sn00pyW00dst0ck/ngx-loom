@@ -18,14 +18,44 @@
             <ng-content />
 
             <!--Handles all the edges between nodes-->
-            <svg:g class="edges">
+            @for (edge of edges; track edge.id) {
+            <svg:g class="edge-group" [id]="edge.id" (click)="onEdgeClick($event, edge)">
+                @if (edgeTemplate) {
+                <ng-container [ngTemplateOutlet]="edgeTemplate" [ngTemplateOutletContext]="{ $implicit: edge }" />
+                } @else {
+                <svg:defs>
+                    <svg:marker [attr.id]="'arrow-' + edge.id" [attr.viewBox]="'0 -10 20 20'" refX="8" refY="0"
+                        markerWidth="10" markerHeight="10" orient="auto">
+                        <svg:path d="M 0 -10 L 10 0 L 0 10" />
+                    </svg:marker>
+                </svg:defs>
 
+                <svg:path class="edge" [attr.marker-end]="'url(#arrow-' + edge.id + ')'" [attr.d]="edge.line" />
+                }
             </svg:g>
+            } @empty {
+
+            }
 
             <!--Handles all the nodes-->
-            <svg:g class="nodes">
+            @for (node of nodes; track node.id) {
+            <svg:g class="node-group" [id]="node.id" (click)="onNodeClick($event, node)">
+                @if (nodeTemplate) {
+                <ng-container [ngTemplateOutlet]="nodeTemplate" [ngTemplateOutletContext]="{ $implicit: node }" />
+                } @else {
+                <!--Show Nodes as Circles In Default Template-->
+                <svg:circle r="10" [attr.cx]="node.dimension.w! / 2" [attr.cy]="node.dimension.h! / 2" />
 
+                <!--Show Node Labels In Default Template-->
+                <svg:text alignment-baseline="central" dominant-baseline="middle" text-anchor="middle"
+                    [attr.x]="node.dimension.w! / 2" [attr.y]="node.dimension.h! * (3/2)">
+                    {{ node.label }}
+                </svg:text>
+                }
             </svg:g>
+            } @empty {
+
+            }
         </svg:g>
     </svg:svg>
 </div>
