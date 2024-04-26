@@ -1,24 +1,27 @@
 <div class="loom-outer">
-    <svg:svg class="loom">
+    <svg:svg class="loom" [attr.width]="DOMDimensions().w" [attr.height]="DOMDimensions().h">
 
         <!--This rect is just for user interaction via panning-->
+        @if (initialized) {
         <svg:g>
-            <svg:rect class="panning-rect" [attr.width]="width()" [attr.height]="height()"
+            <svg:rect class="panning-rect" [attr.width]="DOMDimensions().w" [attr.height]="DOMDimensions().h"
                 (mousedown)="isPanning = true" />
         </svg:g>
-
 
         <svg:g class="loom">
             <defs>
                 <ng-container *ngIf="defsTemplate" [ngTemplateOutlet]="defsTemplate" />
-                <svg:path class="text-path" *ngFor="let edge of graph.edges" [attr.d]="edge.textPath"
-                    [attr.id]="edge.id" />
+                @for (edge of edges(); track edge.id) {
+                <svg:path class="text-path" [attr.id]="edge.id" [attr.d]="edge.textPath" />
+                } @empty {
+
+                }
             </defs>
 
             <ng-content />
 
             <!--Handles all the edges between nodes-->
-            @for (edge of edges; track edge.id) {
+            @for (edge of edges(); track edge.id) {
             <svg:g class="edge-group" [id]="edge.id" (click)="onEdgeClick($event, edge)">
                 @if (edgeTemplate) {
                 <ng-container [ngTemplateOutlet]="edgeTemplate" [ngTemplateOutletContext]="{ $implicit: edge }" />
@@ -38,7 +41,7 @@
             }
 
             <!--Handles all the nodes-->
-            @for (node of nodes; track node.id) {
+            @for (node of nodes(); track node.id) {
             <svg:g class="node-group" [id]="node.id" (click)="onNodeClick($event, node)">
                 @if (nodeTemplate) {
                 <ng-container [ngTemplateOutlet]="nodeTemplate" [ngTemplateOutletContext]="{ $implicit: node }" />
@@ -57,5 +60,8 @@
 
             }
         </svg:g>
+        } @else {
+
+        }
     </svg:svg>
 </div>

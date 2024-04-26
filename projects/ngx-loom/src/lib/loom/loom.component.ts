@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, HostListener, Output, computed, input, signal } from "@angular/core";
+import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Output, QueryList, TemplateRef, ViewChildren, computed, input, signal } from "@angular/core";
 import { Node, Edge, Matrix } from "../interface/loom.interface";
 import { identity, scale, smoothMatrix, toSVG, transform, translate } from 'transformation-matrix';
 
@@ -53,6 +53,13 @@ export class LoomComponent {
      */
     private graphDimensions: { w: number, h: number } = { w: 0, h: 0 };
 
+    @ContentChild('nodeTemplate') nodeTemplate!: TemplateRef<any>;
+    @ContentChild('edgeTemplate') edgeTemplate!: TemplateRef<any>;
+    @ContentChild('clusterTemplate') clusterTemplate!: TemplateRef<any>;
+    @ContentChild('defsTemplate') defsTemplate!: TemplateRef<any>;
+
+    @ViewChildren('nodeElement') nodeElements!: QueryList<ElementRef>;
+    @ViewChildren('edgeElement') edgeElements!: QueryList<ElementRef>;
 
     /**
      * 

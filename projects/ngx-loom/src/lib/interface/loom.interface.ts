@@ -42,6 +42,9 @@ export class Edge {
      * The text label for this edge.
      */
     public label: string = "";
+
+    public line: any;
+    public textPath: any;
 };
 
 
