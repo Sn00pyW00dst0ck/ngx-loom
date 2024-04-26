@@ -129,10 +129,78 @@ export class LoomComponent {
 
     //#region Panning
 
+    /**
+     * Pan the graph by a fixed x and y amount.
+     * 
+     * @param { number } x the x amount to pan by.
+     * @param { number } y the y amount to pan by.
+     * @param { boolean } ignoreZoomLevel whether to scale the panning by the zoom factor or no. Default is false.
+     */
+    private pan = (x: number, y: number, ignoreZoomLevel: boolean = false): void => {
+        // Ensure proper input
+        if (isNaN(x) || isNaN(y)) {
+            return;
+        }
+
+    }
+
+    /**
+     * Pan the graph so it is centered at a given position.
+     * 
+     * @param { number } x the x coord to pan to.
+     * @param { number } y the y coord to pan to. 
+     */
+    private panTo = (x: number, y: number): void => {
+        // Ensure proper input
+        if (isNaN(x) || isNaN(y)) {
+            return;
+        }
+
+    }
+
+    /**
+     * Pan the view to center on a specific node. 
+     * 
+     * @param { string } id the id of the Node to pan to. 
+     */
+    private panToNode = (id: string): void => {
+        const node = this.nodes().find((node: Node) => node.id === id);
+        if (!node || !node.position) { return; }
+        this.panTo(node.position.x, node.position.y);
+    }
+
+    /**
+     * Pan to center the graph within the DOM container. 
+     */
+    public panToCenter = (): void => this.panTo(this.graphDimensions.w / 2, this.graphDimensions.h / 2);
+
     //#endregion
 
 
     //#region Zooming
+
+    /**
+     * 
+     * @param factor 
+     */
+    private zoom = (factor: number): void => {
+
+    }
+
+    /**
+     * 
+     * @param level 
+     */
+    private zoomTo = (level: number): void => {
+
+    }
+
+    /**
+     * 
+     */
+    private zoomToFit = (): void => {
+
+    }
 
     //#endregion
 }
