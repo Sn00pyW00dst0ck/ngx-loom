@@ -1,4 +1,4 @@
-<div class="loom-outer">
+<div class="loom-outer" (mouseWheelUp)="onScroll($any($event))" (mouseWheelDown)="onScroll($any($event))" mouseWheel>
     <svg:svg class="loom" [attr.width]="DOMDimensions().w" [attr.height]="DOMDimensions().h">
 
         <!--This rect is just for user interaction via panning-->
@@ -8,7 +8,7 @@
                 (mousedown)="isPanning = true" />
         </svg:g>
 
-        <svg:g [attr.transform]="transform()">
+        <svg:g class="content" [attr.transform]="transform()">
             <defs>
                 <ng-container *ngIf="defsTemplate" [ngTemplateOutlet]="defsTemplate" />
                 @for (edge of edges(); track edge.id) {

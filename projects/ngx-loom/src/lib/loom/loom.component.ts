@@ -2,6 +2,8 @@ import { CommonModule } from "@angular/common";
 import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Output, QueryList, TemplateRef, ViewChildren, computed, input, signal } from "@angular/core";
 import { Node, Edge, Matrix } from "../interface/loom.interface";
 import { identity, scale, smoothMatrix, toSVG, transform, translate } from 'transformation-matrix';
+import { constrain } from "../../utils";
+import { MouseWheelDirective } from "../../mousewheel.directive";
 
 
 /**
@@ -10,7 +12,7 @@ import { identity, scale, smoothMatrix, toSVG, transform, translate } from 'tran
 @Component({
     selector: 'loom',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, MouseWheelDirective],
     templateUrl: './loom.component.html',
     styleUrl: './loom.component.sass',
 })
@@ -49,7 +51,12 @@ export class LoomComponent {
     protected isPanning: boolean = false;
 
 
+    protected zoomEnabled = signal<boolean>(true);
     protected zoomLevel = signal<number>(1);
+    protected minZoomLevel = signal<number>(1);
+    protected maxZoomLevel = signal<number>(10);
+    protected zoomSpeed = signal<number>(0.1);
+    protected panOnZoom = signal<boolean>(true);
 
 
     /**
@@ -86,7 +93,7 @@ export class LoomComponent {
     /**
      * 
      */
-    constructor() {
+    constructor(private el: ElementRef) {
         // TODO: Setup a bunch of effects here...
         this.initialized = true;
     }
@@ -112,6 +119,41 @@ export class LoomComponent {
      */
     @HostListener('document:mouseup', ['$event'])
     private onMouseUp = ($event: MouseEvent): void => { this.isPanning = false };
+
+    /**
+     * A function that fires on scroll wheel events within the graph component. 
+     * 
+     * @param { WheelEvent } $event the mousewheel event which triggered this function call. 
+     */
+    protected onScroll = ($event: WheelEvent): void => {
+        // check if zoom is on or not. 
+
+        const zoomFactor = 1 + ($event.deltaY < 0 ? this.zoomSpeed() : -this.zoomSpeed());
+
+        // Apply the actual zoom
+        if (this.panOnZoom() && $event) {
+            // Absolute mouse X/Y on the screen
+            const mouseX = $event.clientX;
+            const mouseY = $event.clientY;
+
+            // Transform to SVG X/Y
+            const svg = this.el.nativeElement.querySelector('svg');
+            const svgGroup = svg.querySelector('g.content');
+
+            // Create a SVG point
+            const point = svg.createSVGPoint();
+            point.x = mouseX;
+            point.y = mouseY;
+            const svgPoint = point.matrixTransform(svgGroup.getScreenCTM().inverse());
+
+            // Pan around SVG, zoom, then unpan
+            this.pan(svgPoint.x, svgPoint.y, true);
+            this.zoom(zoomFactor);
+            this.pan(-svgPoint.x, -svgPoint.y, true);
+        } else {
+            this.zoom(zoomFactor);
+        }
+    }
 
     /**
      * Emits the proper event whenever a node element is clicked.
@@ -194,26 +236,36 @@ export class LoomComponent {
     //#region Zooming
 
     /**
+     * Zoom the graph by a factor. Used for the scroll wheel zooming. 
      * 
-     * @param factor 
+     * @param { number } factor the factor to zoom by. 
      */
-    private zoom = (factor: number): void => {
-
-    }
+    private zoom = (factor: number): void => this.zoomTo(transform(this.transformationMatrix(), scale(factor, factor)).a);
 
     /**
+     * Zoom to a specific zoom level. 
      * 
-     * @param level 
+     * @param { number } level the level to zoom to. 
      */
     private zoomTo = (level: number): void => {
+        // Constrain the zoom amount
+        const constrainedLevel = constrain(this.minZoomLevel(), level, this.maxZoomLevel());
 
+        this.transformationMatrix.update((value) => {
+            value.a = isNaN(level) ? value.a : Number(constrainedLevel);
+            value.d = isNaN(level) ? value.d : Number(constrainedLevel);
+            return value;
+        });
+        this.zoomLevel.set(this.transformationMatrix().a);
     }
 
     /**
-     * 
+     * Zoom to give the graph the best fit within the DOM dimensions.
      */
     private zoomToFit = (): void => {
-
+        const widthZoom = this.DOMDimensions().w / this.graphDimensions.w;
+        const heightZoom = this.DOMDimensions().h / this.graphDimensions.h;
+        this.zoomTo(Math.min(heightZoom, widthZoom, 1));
     }
 
     //#endregion
