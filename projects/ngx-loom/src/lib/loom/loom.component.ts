@@ -59,13 +59,22 @@ export class LoomComponent {
      */
     protected isPanning: boolean = false;
 
-
-    protected zoomEnabled = signal<boolean>(true);
+    /**
+     * The current level of zoom applied.
+     */
     protected zoomLevel = signal<number>(1);
-    protected minZoomLevel = signal<number>(0.1);
-    protected maxZoomLevel = signal<number>(10);
-    protected zoomSpeed = signal<number>(0.1);
-    protected panOnZoom = signal<boolean>(true);
+    /**
+     * The lowest zoom level allowed.
+     */
+    protected minZoomLevel = input<number>(0.1);
+    /**
+     * The highest zoom level allowed.
+     */
+    protected maxZoomLevel = input<number>(10);
+    /**
+     * The speed at which zooming with the scrollwheel occurs.
+     */
+    protected zoomSpeed = input<number>(0.1);
 
 
     /**
@@ -147,32 +156,26 @@ export class LoomComponent {
      * @param { WheelEvent } $event the mousewheel event which triggered this function call. 
      */
     protected onScroll = ($event: WheelEvent): void => {
-        // check if zoom is on or not. 
         const zoomFactor = 1 + ($event.deltaY < 0 ? this.zoomSpeed() : -this.zoomSpeed());
 
-        // Apply the actual zoom
-        if (this.panOnZoom() && $event) {
-            // Absolute mouse X/Y on the screen
-            const mouseX = $event.clientX;
-            const mouseY = $event.clientY;
+        // Absolute mouse X/Y on the screen
+        const mouseX = $event.clientX;
+        const mouseY = $event.clientY;
 
-            // Transform to SVG X/Y
-            const svg = this.el.nativeElement.querySelector('svg');
-            const svgGroup = svg.querySelector('g.content');
+        // Transform to SVG X/Y
+        const svg = this.el.nativeElement.querySelector('svg');
+        const svgGroup = svg.querySelector('g.content');
 
-            // Create a SVG point
-            const point = svg.createSVGPoint();
-            point.x = mouseX;
-            point.y = mouseY;
-            const svgPoint = point.matrixTransform(svgGroup.getScreenCTM().inverse());
+        // Create a SVG point
+        const point = svg.createSVGPoint();
+        point.x = mouseX;
+        point.y = mouseY;
+        const svgPoint = point.matrixTransform(svgGroup.getScreenCTM().inverse());
 
-            // Pan around SVG, zoom, then unpan
-            this.pan(svgPoint.x, svgPoint.y, true);
-            this.zoom(zoomFactor);
-            this.pan(-svgPoint.x, -svgPoint.y, true);
-        } else {
-            this.zoom(zoomFactor);
-        }
+        // Pan around SVG, zoom, then unpan
+        this.pan(svgPoint.x, svgPoint.y, true);
+        this.zoom(zoomFactor);
+        this.pan(-svgPoint.x, -svgPoint.y, true);
     }
 
     /**
@@ -322,7 +325,7 @@ export class LoomComponent {
     /**
      * Zoom to give the graph the best fit within the DOM dimensions.
      */
-    private zoomToFit = (): void => {
+    public zoomToFit = (): void => {
         const widthZoom = this.DOMDimensions().w / this.graphDimensions.w;
         const heightZoom = this.DOMDimensions().h / this.graphDimensions.h;
         this.zoomTo(Math.min(heightZoom, widthZoom, 1));
