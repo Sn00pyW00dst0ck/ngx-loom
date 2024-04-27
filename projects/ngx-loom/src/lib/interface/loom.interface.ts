@@ -47,10 +47,15 @@ export class Edge {
      * The text label for this edge.
      */
     public label: string = "";
-
-    public line: any;
-    public textPath: any;
+    /**
+     * A sequence of points used to generate the 'line' property.
+     */
     public points: { x: number, y: number }[] = [];
+    /**
+     * The SVG string which describes the path for rendering the edge.
+     */
+    public line: string = "";
+    public textPath: any;
 };
 
 /**
@@ -78,7 +83,7 @@ export interface Layout {
 
 
 /**
- * 
+ * Utilized internally in the Loom Component to simplify calculations for transforms relating to zooming and panning. 
  */
 export interface Matrix {
     a: number,

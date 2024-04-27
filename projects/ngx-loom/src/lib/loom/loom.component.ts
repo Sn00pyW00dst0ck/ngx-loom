@@ -36,9 +36,9 @@ export class LoomComponent {
      */
     public layout = input.required<Layout>();
     /**
-     * 
+     * Determines which curve/line type used to connect nodes.
      */
-    public curve = signal<any>(shape.curveBundle.beta(1));
+    public curve = input<shape.CurveBundleFactory>(shape.curveBundle.beta(1));
 
     /**
      * The transformation matrix stores pan and zoom information.
@@ -47,7 +47,7 @@ export class LoomComponent {
     /**
      * The 'transform' computed signal translates the transformationMatrix into CSS useable format.
      */
-    public readonly transform = computed(() => toSVG(smoothMatrix(this.transformationMatrix(), 100)));
+    protected readonly transform = computed(() => toSVG(smoothMatrix(this.transformationMatrix(), 100)));
 
     /**
      * Tracks if the graph has been initialized or not.
@@ -222,17 +222,17 @@ export class LoomComponent {
         });
 
         this.graphUpdate().edges.map((e: Edge) => {
-            e.line = this.generateLine(e.points);
+            e.line = this.generateLine(e.points) || "";
         });
     }
 
     /**
      * A helper function to generate the correct d3 line shape when given a set of points.
      *
-     * @param {any} points the points to generate the line for
-     * @returns
+     * @param { { x: number, y: number}[] } points the points to generate the line for
+     * @returns { string | null } the string representing the path between the points, which is used to draw the SVG output.
      */
-    private generateLine = (points: any) => (shape.line<any>().x((d) => d.x).y((d) => d.y).curve(this.curve()))(points);
+    private generateLine = (points: { x: number, y: number }[]): string | null => (shape.line<any>().x((d) => d.x).y((d) => d.y).curve(this.curve()))(points);
 
     //#endregion
 
