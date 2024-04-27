@@ -196,6 +196,7 @@ export class LoomComponent {
     private recalculateGraphLayout = (): void => {
         // Run the layout
         this.graphUpdate = this.layout().run(this.nodes(), this.edges());
+        console.log(this.graphUpdate());
         // Apply new node dimensions if applicable
         if (this.nodes().length > 0) {
             // this.applyNodeDimensions();
@@ -203,18 +204,7 @@ export class LoomComponent {
         }
     }
 
-    private tick = (): void => {
-        // Set view options for the nodes & clusters (for animations to work)
-        const oldNodes: Set<string> = new Set();
-        this.nodes().map((n: any) => {
-            n.transform = `translate(${n.position.x - n.dimension.w / 2}, ${n.position.y - n.dimension.h / 2})`;
-            n.color ??= '#000000';
-            oldNodes.add(n.id!);
-        });
-        setTimeout(() => { let x = oldNodes; }, 500);
-
-        // update edges...
-    }
+    private tick = (): void => { }
 
     //#endregion
 

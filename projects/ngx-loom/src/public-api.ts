@@ -3,4 +3,5 @@
  */
 
 export { LoomComponent } from "./lib/loom/loom.component";
-export { Node, Edge } from "./lib/interface/loom.interface";
+export { Node, Edge, Layout } from "./lib/interface/loom.interface";
+export * from "./lib/layouts/dagre.layout";

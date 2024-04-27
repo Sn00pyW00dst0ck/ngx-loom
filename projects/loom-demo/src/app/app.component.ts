@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoomComponent, Node, Edge } from 'ngx-loom';
+import { LoomComponent, Node, Edge, DagreLayout } from 'ngx-loom';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +12,7 @@ import { LoomComponent, Node, Edge } from 'ngx-loom';
 export class AppComponent {
   title = 'loom-demo';
 
-  nodes: Node[] = [new Node()];
+  nodes: Node[] = [new Node(), new Node()];
   edges: Edge[] = [];
+  layout: DagreLayout = new DagreLayout();
 }

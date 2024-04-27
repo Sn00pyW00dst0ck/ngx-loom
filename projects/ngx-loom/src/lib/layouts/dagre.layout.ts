@@ -60,10 +60,10 @@ export class DagreLayout {
     private dagreEdges: any;
 
     public run = (nodes: Node[], edges: Edge[]): WritableSignal<{ nodes: Node[], edges: Edge[] }> => {
-        const dagreGraph = this.createDagreGraph(nodes, edges);
+        const dagreGraph = this.createDagreGraph(nodes, edges) as any;
         dagre.layout(dagreGraph);
 
-        dagreGraph._nodes.forEach((dagreNodeId: string) => {
+        for (const dagreNodeId in dagreGraph._nodes) {
             const dagreNode = dagreGraph._nodes[dagreNodeId];
             const node = nodes.find(n => n.id === dagreNode.id)!;
             node.position = {
@@ -74,7 +74,7 @@ export class DagreLayout {
                 w: dagreNode.width,
                 h: dagreNode.height
             };
-        });
+        }
 
         return signal({ nodes, edges });
     };
@@ -101,7 +101,7 @@ export class DagreLayout {
 
     private createDagreGraph = (nodes: Node[], edges: Edge[]) => {
         const settings = Object.assign({}, this.defaultSettings, this.settings);
-        const dagreGraph = new dagre.graphlib.Graph({ compound: settings.compound, multigraph: settings.multigraph });
+        const dagreGraph = new dagre.graphlib.Graph({ compound: settings.compound, multigraph: settings.multigraph }) as any;
 
         // Apply the settings
         dagreGraph.setGraph({
