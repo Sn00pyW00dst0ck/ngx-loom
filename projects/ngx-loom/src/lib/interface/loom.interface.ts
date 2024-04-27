@@ -1,3 +1,4 @@
+import { WritableSignal } from "@angular/core";
 import { nanoid } from "nanoid"
 
 /**
@@ -45,6 +46,30 @@ export class Edge {
 
     public line: any;
     public textPath: any;
+    public points: { x: number, y: number }[] = [];
+};
+
+/**
+ * The interface for a 'Layout' which is used by the GraphComponent to actually render the graph.
+ */
+export interface Layout {
+    /**
+     * The settings for the layout.
+     */
+    settings?: any;
+
+    /**
+     *
+     * @param graph
+     */
+    run(nodes: Node[], edges: Edge[]): WritableSignal<{ nodes: Node[], edges: Edge[] }>;
+
+    /**
+     *
+     * @param graph
+     * @param edge
+     */
+    updateEdge(nodes: Node[], edges: Edge[], edge: Edge): WritableSignal<{ nodes: Node[], edges: Edge[] }>;
 };
 
 

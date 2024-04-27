@@ -1,9 +1,9 @@
 import { CommonModule } from "@angular/common";
-import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Output, QueryList, TemplateRef, ViewChildren, computed, input, signal } from "@angular/core";
-import { Node, Edge, Matrix } from "../interface/loom.interface";
+import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Output, QueryList, TemplateRef, ViewChildren, computed, effect, input, signal, untracked } from "@angular/core";
+import { Node, Edge, Matrix, Layout } from "../interface/loom.interface";
 import { identity, scale, smoothMatrix, toSVG, transform, translate } from 'transformation-matrix';
-import { constrain } from "../../utils";
-import { MouseWheelDirective } from "../../mousewheel.directive";
+import { constrain } from "../utils";
+import { MouseWheelDirective } from "../mousewheel.directive";
 
 
 /**
@@ -30,6 +30,10 @@ export class LoomComponent {
      * The edges for the loom to display.
      */
     public edges = input.required<Edge[]>();
+    /**
+     * The layout to use to render the graph.
+     */
+    public layout = input.required<Layout>();
 
     /**
      * The transformation matrix stores pan and zoom information.
@@ -63,6 +67,10 @@ export class LoomComponent {
      * The dimensions of the graph within the loom. Necessary because the graph will not be the same size as the DOM container.
      */
     private graphDimensions: { w: number, h: number } = { w: 0, h: 0 };
+    /**
+     * 
+     */
+    private graphUpdate = signal<{ nodes: Node[], edges: Edge[] } | null>(null);
 
     @ContentChild('nodeTemplate') nodeTemplate!: TemplateRef<any>;
     @ContentChild('edgeTemplate') edgeTemplate!: TemplateRef<any>;
@@ -80,14 +88,6 @@ export class LoomComponent {
      * 
      */
     @Output() edgeClicked = new EventEmitter<{ event: MouseEvent, edge: Edge }>();
-    /**
-     * 
-     */
-    @Output() graphPanned = new EventEmitter<void>();
-    /**
-     * 
-     */
-    @Output() graphZoomed = new EventEmitter<void>();
 
 
     /**
@@ -95,6 +95,23 @@ export class LoomComponent {
      */
     constructor(private el: ElementRef) {
         // TODO: Setup a bunch of effects here...
+
+        // Setup an effect to regenerate the graph when key things update. 
+        effect(() => {
+            this.DOMDimensions();
+            this.nodes();
+            this.edges();
+
+            untracked(() => requestAnimationFrame(() => this.recalculateGraphLayout()));
+        });
+
+        // Setup the effect to draw the graph when necessary
+        effect(() => {
+            if (this.graphUpdate() !== null) {
+                this.tick();
+            }
+        });
+
         this.initialized = true;
     }
 
@@ -170,6 +187,34 @@ export class LoomComponent {
      * @param { Edge } edge the edge which was clicked
      */
     protected onEdgeClick = ($event: MouseEvent, edge: Edge): void => this.edgeClicked.emit({ event: $event, edge: edge });
+
+    //#endregion
+
+
+    //#region Graph Drawing
+
+    private recalculateGraphLayout = (): void => {
+        // Run the layout
+        this.graphUpdate = this.layout().run(this.nodes(), this.edges());
+        // Apply new node dimensions if applicable
+        if (this.nodes().length > 0) {
+            // this.applyNodeDimensions();
+            // this.updateGraphDimensions();
+        }
+    }
+
+    private tick = (): void => {
+        // Set view options for the nodes & clusters (for animations to work)
+        const oldNodes: Set<string> = new Set();
+        this.nodes().map((n: any) => {
+            n.transform = `translate(${n.position.x - n.dimension.w / 2}, ${n.position.y - n.dimension.h / 2})`;
+            n.color ??= '#000000';
+            oldNodes.add(n.id!);
+        });
+        setTimeout(() => { let x = oldNodes; }, 500);
+
+        // update edges...
+    }
 
     //#endregion
 
