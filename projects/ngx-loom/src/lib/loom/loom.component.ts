@@ -62,7 +62,7 @@ export class LoomComponent {
 
     protected zoomEnabled = signal<boolean>(true);
     protected zoomLevel = signal<number>(1);
-    protected minZoomLevel = signal<number>(1);
+    protected minZoomLevel = signal<number>(0.1);
     protected maxZoomLevel = signal<number>(10);
     protected zoomSpeed = signal<number>(0.1);
     protected panOnZoom = signal<boolean>(true);
@@ -73,7 +73,7 @@ export class LoomComponent {
      */
     private graphDimensions: { w: number, h: number } = { w: 0, h: 0 };
     /**
-     * 
+     * This is a signal which updates each time the layout changes something within the displayed graph. 
      */
     protected graphUpdate = signal<{ nodes: Node[], edges: Edge[] }>({ nodes: [], edges: [] });
 
@@ -96,11 +96,9 @@ export class LoomComponent {
 
 
     /**
-     * 
+     * Constructs the loom component by setting up the effect functions. 
      */
     constructor(private el: ElementRef) {
-        // TODO: Setup a bunch of effects here...
-
         effect(() => {
             // When any of these changes
             this.DOMDimensions();
@@ -111,11 +109,11 @@ export class LoomComponent {
             this.recalculateGraphLayout();
         });
 
-        // Setup the effect to draw the graph when necessary
         effect(() => {
-            if (this.graphUpdate() !== null) {
-                this.tick();
-            }
+            // When any of these changes
+            this.graphUpdate();
+            // Redraw the graph using tick
+            this.tick();
         });
 
         this.initialized = true;
@@ -150,7 +148,6 @@ export class LoomComponent {
      */
     protected onScroll = ($event: WheelEvent): void => {
         // check if zoom is on or not. 
-
         const zoomFactor = 1 + ($event.deltaY < 0 ? this.zoomSpeed() : -this.zoomSpeed());
 
         // Apply the actual zoom

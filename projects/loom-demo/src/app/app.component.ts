@@ -12,12 +12,24 @@ import { LoomComponent, Node, Edge, DagreLayout, Orientation } from 'ngx-loom';
 export class AppComponent {
   title = 'loom-demo';
 
-  nodes: Node[] = [new Node(), new Node(), new Node(), new Node()];
-  edges: Edge[] = (() => {
+  // Setup some test nodes
+  protected nodes: Node[] = (() => {
+    let ns = [];
+    ns.push(new Node());
+    ns.push(new Node());
+    ns.push(new Node());
+    ns.push(new Node());
+    ns[0].label = "Hello World";
+    return ns;
+  })();
+
+  // Setup some test edges
+  protected edges: Edge[] = (() => {
     let es = [];
     es.push(new Edge());
     es[0].source = this.nodes[0].id;
     es[0].target = this.nodes[1].id;
+    es[0].label = "Test";
     es.push(new Edge());
     es[1].source = this.nodes[0].id;
     es[1].target = this.nodes[1].id;
@@ -29,7 +41,8 @@ export class AppComponent {
     es[3].target = this.nodes[3].id;
     return es;
   })();
-  layout: DagreLayout = new DagreLayout();
+
+  protected layout: DagreLayout = new DagreLayout();
 
   constructor() {
     this.layout.settings = {
