@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, ContentChild, ElementRef, EventEmitter, HostListener, Output, QueryList, TemplateRef, ViewChildren, computed, effect, input, signal, untracked } from "@angular/core";
 import { Node, Edge, Matrix, Layout } from "../interface/loom.interface";
 import { identity, scale, smoothMatrix, toSVG, transform, translate } from 'transformation-matrix';
+import * as shape from 'd3-shape';
 import { constrain } from "../utils";
 import { MouseWheelDirective } from "../mousewheel.directive";
 
@@ -34,6 +35,10 @@ export class LoomComponent {
      * The layout to use to render the graph.
      */
     public layout = input.required<Layout>();
+    /**
+     * 
+     */
+    public curve = signal<any>(shape.curveBundle.beta(1));
 
     /**
      * The transformation matrix stores pan and zoom information.
@@ -70,7 +75,7 @@ export class LoomComponent {
     /**
      * 
      */
-    private graphUpdate = signal<{ nodes: Node[], edges: Edge[] } | null>(null);
+    protected graphUpdate = signal<{ nodes: Node[], edges: Edge[] }>({ nodes: [], edges: [] });
 
     @ContentChild('nodeTemplate') nodeTemplate!: TemplateRef<any>;
     @ContentChild('edgeTemplate') edgeTemplate!: TemplateRef<any>;
@@ -96,13 +101,14 @@ export class LoomComponent {
     constructor(private el: ElementRef) {
         // TODO: Setup a bunch of effects here...
 
-        // Setup an effect to regenerate the graph when key things update. 
         effect(() => {
+            // When any of these changes
             this.DOMDimensions();
             this.nodes();
             this.edges();
-
-            untracked(() => requestAnimationFrame(() => this.recalculateGraphLayout()));
+            this.layout();
+            // Recalculate the graph layout
+            this.recalculateGraphLayout();
         });
 
         // Setup the effect to draw the graph when necessary
@@ -193,6 +199,9 @@ export class LoomComponent {
 
     //#region Graph Drawing
 
+    /**
+     * Recalculates the graph layout.
+     */
     private recalculateGraphLayout = (): void => {
         // Run the layout
         this.graphUpdate = this.layout().run(this.nodes(), this.edges());
@@ -204,7 +213,26 @@ export class LoomComponent {
         }
     }
 
-    private tick = (): void => { }
+    /**
+     * Updates all node transforms and line edges.
+     */
+    private tick = (): void => {
+        this.graphUpdate().nodes.map((n: Node) => {
+            n.transform = `translate(${n.position.x - n.dimension.w / 2}, ${n.position.y - n.dimension.h / 2})`;
+        });
+
+        this.graphUpdate().edges.map((e: Edge) => {
+            e.line = this.generateLine(e.points);
+        });
+    }
+
+    /**
+     * A helper function to generate the correct d3 line shape when given a set of points.
+     *
+     * @param {any} points the points to generate the line for
+     * @returns
+     */
+    private generateLine = (points: any) => (shape.line<any>().x((d) => d.x).y((d) => d.y).curve(this.curve()))(points);
 
     //#endregion
 

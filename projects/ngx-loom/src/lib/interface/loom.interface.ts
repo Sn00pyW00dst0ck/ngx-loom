@@ -21,6 +21,10 @@ export class Node {
      * The text label for this node. 
      */
     public label: string = "";
+    /**
+     * The css string which transforms the node to be in the correct position on the SVG.
+     */
+    public transform: string = "";
 };
 
 /**

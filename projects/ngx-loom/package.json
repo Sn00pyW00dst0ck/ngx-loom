@@ -6,14 +6,11 @@
     "@angular/core": "^17.3.0",
     "nanoid": "^5.0.7",
     "transformation-matrix": "^2.16.1",
-    "dagre": "^0.8.5"
+    "dagre": "^0.8.5",
+    "d3": "^7.8.5"
   },
   "devDependencies": {
-    "tslib": "^2.3.0",
-    "nanoid": "^5.0.7",
-    "transformation-matrix": "^2.16.1",
-    "dagre": "^0.8.5",
-    "@types/dagre": "^0.7.52"
+    "tslib": "^2.3.0"
   },
   "sideEffects": false
 }

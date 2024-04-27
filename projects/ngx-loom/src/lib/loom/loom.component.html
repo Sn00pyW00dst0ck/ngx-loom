@@ -11,7 +11,7 @@
         <svg:g class="content" [attr.transform]="transform()">
             <defs>
                 <ng-container *ngIf="defsTemplate" [ngTemplateOutlet]="defsTemplate" />
-                @for (edge of edges(); track edge.id) {
+                @for (edge of graphUpdate().edges; track edge.id) {
                 <svg:path class="text-path" [attr.id]="edge.id" [attr.d]="edge.textPath" />
                 } @empty {
 
@@ -21,7 +21,7 @@
             <ng-content />
 
             <!--Handles all the edges between nodes-->
-            @for (edge of edges(); track edge.id) {
+            @for (edge of graphUpdate().edges; track edge.id) {
             <svg:g class="edge-group" [id]="edge.id" (click)="onEdgeClick($event, edge)">
                 @if (edgeTemplate) {
                 <ng-container [ngTemplateOutlet]="edgeTemplate" [ngTemplateOutletContext]="{ $implicit: edge }" />
@@ -33,7 +33,7 @@
                     </svg:marker>
                 </svg:defs>
 
-                <svg:path class="edge" [attr.marker-end]="'url(#arrow-' + edge.id + ')'" [attr.d]="edge.line" />
+                <svg:path class="edge" [attr.d]="edge.line" [attr.marker-end]="'url(#arrow-' + edge.id + ')'" />
                 }
             </svg:g>
             } @empty {
@@ -41,17 +41,18 @@
             }
 
             <!--Handles all the nodes-->
-            @for (node of nodes(); track node.id) {
-            <svg:g class="node-group" [id]="node.id" (click)="onNodeClick($event, node)">
+            @for (node of graphUpdate().nodes; track node.id) {
+            <svg:g class="node-group" [id]="node.id" [attr.transform]="node.transform"
+                (click)="onNodeClick($event, node)">
                 @if (nodeTemplate) {
                 <ng-container [ngTemplateOutlet]="nodeTemplate" [ngTemplateOutletContext]="{ $implicit: node }" />
                 } @else {
                 <!--Show Nodes as Circles In Default Template-->
-                <svg:circle r="10" [attr.cx]="node.dimension.w! / 2" [attr.cy]="node.dimension.h! / 2" />
+                <svg:circle r="10" [attr.cx]="node.dimension.w / 2" [attr.cy]="node.dimension.h / 2" />
 
                 <!--Show Node Labels In Default Template-->
                 <svg:text alignment-baseline="central" dominant-baseline="middle" text-anchor="middle"
-                    [attr.x]="node.dimension.w! / 2" [attr.y]="node.dimension.h! * (3/2)">
+                    [attr.x]="node.dimension.w / 2" [attr.y]="node.dimension.h * (3/2)">
                     {{ node.label }}
                 </svg:text>
                 }

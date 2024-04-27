@@ -2,16 +2,20 @@
     user-select: none
 
     .panning-rect
-        fill: rgba(0, 0, 0, 0)
+        fill: #00000000
         cursor: move
 
-    .edge
-        fill: none
+    .edge-group
+        cursor: pointer
+    
+        .edge
+            fill: none
+            stroke: #000000
 
-        .edge-label
-            stroke: none
-            font-size: 12px
-            fill: #251e1e
+            .edge-label
+                stroke: none
+                font-size: 12px
+                fill: #251e1e
     
     .node-group
         cursor: pointer
