@@ -14,7 +14,9 @@ describe('LoomComponent', () => {
         await TestBed.configureTestingModule({
             imports: [LoomComponent],
         }).compileComponents();
+    });
 
+    beforeEach(() => {
         fixture = TestBed.createComponent(LoomComponent);
         component = fixture.componentInstance;
         fixture.componentRef.setInput('DOMDimensions', { w: 500, h: 500 });
@@ -22,7 +24,7 @@ describe('LoomComponent', () => {
         fixture.componentRef.setInput('edges', testEdges);
         fixture.componentRef.setInput('layout', new DagreLayout());
         fixture.detectChanges();
-    });
+    })
 
     it('should create the LoomComponent', () => {
         expect(component).toBeTruthy();
@@ -30,23 +32,23 @@ describe('LoomComponent', () => {
 
     it('should recalculate the graph layout when key inputs change', () => {
         spyOn(component as any, 'recalculateGraphLayout');
-        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(1);
+        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(0);
 
         fixture.componentRef.setInput('DOMDimensions', { w: 600, h: 600 });
         fixture.detectChanges();
-        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(2);
+        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(1);
 
         fixture.componentRef.setInput('nodes', [...testNodes, new Node()]);
         fixture.detectChanges();
-        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(3);
+        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(2);
 
         fixture.componentRef.setInput('edges', [...testEdges]);
         fixture.detectChanges();
-        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(4);
+        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(3);
 
         fixture.componentRef.setInput('layout', new DagreLayout());
         fixture.detectChanges();
-        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(5);
+        expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(4);
     });
 
     //it('', () => {
