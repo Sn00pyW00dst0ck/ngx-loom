@@ -1,27 +1,61 @@
-# 
+# ngx-loom
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.
+![Loom Status](https://github.com/Sn00pyW00dst0ck/ng-loom/actions/workflows/loom.yml/badge.svg?event=push)
+![Demo App Status](https://github.com/Sn00pyW00dst0ck/ng-loom/actions/workflows/demo.yml/badge.svg?event=push)
 
-## Development server
+**ngx-loom** is an Angular 17 compatible library with the sole purpose of easily rendering directed graph structures. 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Installation
 
-## Code scaffolding
+To install, utilize the npm command `COMMAND HERE`. 
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Features
 
-## Build
+**ngx-loom** currently provides the following features: 
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1. Ability to render directed (or undirected) graph structures. 
+2. Ability to overwrite the default node and edge display styles utilizing ng-templates.
+3. Ability to pan and zoom the displayed graph.
+4. Ability to implement custom 'layouts', which allows replacing the default rendering engine. 
 
-## Running unit tests
+## Development Setup
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+To setup for development, run the following commands within a Linux terminal. 
+```bash
+git clone "https://github.com/Sn00pyW00dst0ck/ng-loom.git"
+npm i
+```
 
-## Running end-to-end tests
+### Build & Run
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+There are five npm scripts available to build and run ngx-loom and its demo application. 
 
-## Further help
+1. `build:demo:dev` - Builds the demo application with development configuration. 
+2. `build:demo:prod` - Builds the demo applicaiton with production configuration.
+3. `build:loom:dev` - Builds the ngx-loom project with development configuration.
+4. `build:loom:prod` - Builds the ngx-loom project with production configuration.
+5. `serve:demo` - Serves the demo application to localhost. 
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+> [!NOTE]
+> In order to build the demo application, first the ngx-loom project must be built. Without completing this step, building the demo application may fail. 
+
+### Test
+
+There are four npm scripts available to test ngx-loom and its demo application. 
+
+1. `test:demo` - Runs unit tests for the demo application. 
+2. `test:demo:headless` - Runs unit tests for the demo application within headless mode. 
+3. `test:loom` - Runs unit tests for the ngx-loom project.
+4. `test:loom:headless` - Runs unit tests for the ngx-loom project within headless mode. 
+
+### Documentation
+
+Documentation for ngx-loom is created utilizing [Compodoc](https://compodoc.app/). There are two provided npm scripts to generate documentation. 
+
+1. `compodoc:build` - Builds the documentation to a directory `/documentation`.
+2. `compodoc:serve` - Builds and serves the documentation to `localhost:5555`.
+
+*Note: Documentation is not generated for the loom-demo project, only ngx-loom.*
+
+#
+*This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.*
