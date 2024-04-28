@@ -86,16 +86,16 @@ export class LoomComponent {
      */
     protected graphUpdate = signal<{ nodes: Node[], edges: Edge[] }>({ nodes: [], edges: [] });
 
-    @ContentChild('nodeTemplate') nodeTemplate!: TemplateRef<any>;
-    @ContentChild('edgeTemplate') edgeTemplate!: TemplateRef<any>;
-    @ContentChild('defsTemplate') defsTemplate!: TemplateRef<any>;
+    @ContentChild('nodeTemplate') protected nodeTemplate!: TemplateRef<any>;
+    @ContentChild('edgeTemplate') protected edgeTemplate!: TemplateRef<any>;
+    @ContentChild('defsTemplate') protected defsTemplate!: TemplateRef<any>;
 
     /**
-     * 
+     * Event emitter for when a node is clicked.
      */
     @Output() nodeClicked = new EventEmitter<{ event: MouseEvent, node: Node }>();
     /**
-     * 
+     * Event emitter for when an edge is clicked.
      */
     @Output() edgeClicked = new EventEmitter<{ event: MouseEvent, edge: Edge }>();
 
