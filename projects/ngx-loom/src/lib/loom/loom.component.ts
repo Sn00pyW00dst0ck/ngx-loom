@@ -88,11 +88,7 @@ export class LoomComponent {
 
     @ContentChild('nodeTemplate') nodeTemplate!: TemplateRef<any>;
     @ContentChild('edgeTemplate') edgeTemplate!: TemplateRef<any>;
-    @ContentChild('clusterTemplate') clusterTemplate!: TemplateRef<any>;
     @ContentChild('defsTemplate') defsTemplate!: TemplateRef<any>;
-
-    @ViewChildren('nodeElement') nodeElements!: QueryList<ElementRef>;
-    @ViewChildren('edgeElement') edgeElements!: QueryList<ElementRef>;
 
     /**
      * 
@@ -214,7 +210,7 @@ export class LoomComponent {
     }
 
     /**
-     * Updates all node transforms and line edges.
+     * Updates all node transforms and generates line edges.
      */
     private tick = (): void => {
         this.graphUpdate().nodes.map((n: Node) => {
