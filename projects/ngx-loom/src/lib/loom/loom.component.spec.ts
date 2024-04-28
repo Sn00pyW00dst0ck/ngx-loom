@@ -3,8 +3,15 @@ import { LoomComponent } from './loom.component';
 import { Node, Edge } from "../interface/loom.interface";
 import { DagreLayout } from '../layouts/dagre.layout';
 
-const testNodes: Node[] = [];
-const testEdges: Edge[] = [];
+const testNodes: Node[] = [new Node(), new Node(), new Node()];
+const testEdges: Edge[] = (() => {
+    let edges = [new Edge(), new Edge()];
+    edges[0].source = testNodes[0].id;
+    edges[0].target = testNodes[1].id;
+    edges[1].source = testNodes[1].id;
+    edges[1].target = testNodes[2].id;
+    return edges;
+})();
 
 describe('LoomComponent', () => {
     let component: LoomComponent;
@@ -31,6 +38,7 @@ describe('LoomComponent', () => {
     });
 
     it('should recalculate the graph layout when key inputs change', () => {
+        // Using 'as any' to bypass method's private restriction
         spyOn(component as any, 'recalculateGraphLayout');
         expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(0);
 
@@ -51,7 +59,31 @@ describe('LoomComponent', () => {
         expect((component as any).recalculateGraphLayout).toHaveBeenCalledTimes(4);
     });
 
-    //it('', () => {
-    //
-    //});
+    it('should emit the correct node when clicked', () => {
+        spyOn(component.nodeClicked, 'emit');
+        fixture.detectChanges()
+
+        const expectedNode = (component as any).graphUpdate().nodes[1];
+
+        fixture.whenStable().then(() => {
+            const DOMElement = fixture.nativeElement.querySelector(`#${expectedNode.id}`);
+            expect(DOMElement).toBeTruthy();
+            DOMElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            expect(component.nodeClicked.emit).toHaveBeenCalledWith({ event: jasmine.any(MouseEvent), node: expectedNode });
+        });
+    });
+
+    it('should emit the correct edge when clicked', () => {
+        spyOn(component.edgeClicked, 'emit');
+        fixture.detectChanges()
+
+        const expectedEdge = (component as any).graphUpdate().edges[0];
+
+        fixture.whenStable().then(() => {
+            const DOMElement = fixture.nativeElement.querySelector(`#${expectedEdge.id}`);
+            expect(DOMElement).toBeTruthy();
+            DOMElement.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            expect(component.edgeClicked.emit).toHaveBeenCalledWith({ event: jasmine.any(MouseEvent), edge: expectedEdge });
+        });
+    });
 });
