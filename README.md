@@ -23,6 +23,7 @@ To install, utilize the npm command `COMMAND HERE`.
 To setup for development, run the following commands within a Linux terminal. 
 ```bash
 git clone "https://github.com/Sn00pyW00dst0ck/ng-loom.git"
+cd ng-loom
 npm i
 ```
 
