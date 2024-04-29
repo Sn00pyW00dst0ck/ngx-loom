@@ -201,6 +201,7 @@ export class LoomComponent {
     private recalculateGraphLayout = (): void => {
         // Run the layout
         this.graphUpdate = this.layout().run(this.nodes(), this.edges());
+        this.tick();
         console.log(this.graphUpdate());
         // Apply new node dimensions if applicable
         if (this.nodes().length > 0) {

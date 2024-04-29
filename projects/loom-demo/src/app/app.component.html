@@ -1,30 +1,46 @@
 <div style="width: 100vw; height: 100vh; background: #f4f4f4; display: flex; align-items: center;">
-    <div
-        style="width: 33vw; height: 100vh; background: #fff; display: flex; flex-direction: column; gap: 1em; border-right: 1px solid #bbb;">
-        <div>
-            <h1>Edit Display Settings</h1>
-            <!--Add a place to change graph settings-->
-        </div>
-        <div>
-            <h1>Create a Node</h1>
+    <div class="menuPanel">
 
-            <!--Add place for node title input-->
+        <!--Section For Creating Nodes-->
+        <form class="createNodeSection" [formGroup]="createNodeForm">
+            <h1>Create A Node</h1>
+            <label>Node Title</label>
+            <input type="text" formControlName="label" />
+            <button class="__submit" (click)="onCreateNodeFormSubmit()">Create Node</button>
+        </form>
+
+        <div class="divider"></div>
+
+        <!--Section For Creating Edges-->
+        <div class="createEdgeSection">
+            <h1>Create An Edge</h1>
+            @if (!creatingEdge) {
+            <button (click)="creatingEdge = !creatingEdge; sourceNode = null;">Create Edges</button>
+            } @else {
+            <label>Click Nodes To Create Edges</label>
+            <button (click)="creatingEdge = !creatingEdge; sourceNode = null;">Stop Creating Edges</button>
+            }
         </div>
-        <div>
-            <h1>Create an Edge</h1>
-            <!--
-                Two dropdowns for selecting nodes?
-                Or do something similar to course builder by making a click two nodes to draw connection. 
-            -->
-        </div>
-        <div>
-            <h1>Inspect</h1>
+
+        <div class="divider"></div>
+
+        <!--Section For Displaying Information-->
+        <div class="updateNodeSection">
+            <h1>Update Element</h1>
+            @if (!focusedElement) {
+            <label>Click An Element To Update It</label>
+            } @else if (isNode(focusedElement)) {
+            Node
+            } @else {
+            Edge
+            }
             <!--Maybe a section to display node information-->
         </div>
     </div>
 
     <div style="width: 77vw; height: 100vh; display:flex; justify-content: center; align-items: center;">
         <loom style="background: #fff; border: 1px solid #bbb;" [DOMDimensions]="{ w: 700, h: 700}" [nodes]="nodes"
-            [edges]="edges" [layout]="layout"></loom>
+            [edges]="edges" [layout]="layout" (nodeClicked)="onNodeClick($event)" (edgeClicked)="onEdgeClick($event)">
+        </loom>
     </div>
 </div>
