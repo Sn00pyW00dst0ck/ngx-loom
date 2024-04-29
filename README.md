@@ -13,10 +13,12 @@ To install, utilize the npm command `COMMAND HERE`.
 
 **ngx-loom** currently provides the following features: 
 
-1. Ability to render directed (or undirected) graph structures. 
+1. Ability to render directed (or undirected) graph structures.
 2. Ability to overwrite the default node and edge display styles utilizing ng-templates.
 3. Ability to pan and zoom the displayed graph.
-4. Ability to implement custom 'layouts', which allows replacing the default rendering engine. 
+4. Ability to implement custom 'layouts', which allows replacing the default rendering engine.
+5. Ability to bind to output events raised when a graph node or edge is clicked.
+6. Ability to center and auto-zoom the graph utilizing exposed methods.
 
 ## Development Setup
 
