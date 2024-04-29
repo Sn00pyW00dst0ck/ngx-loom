@@ -1,1 +1,30 @@
-<loom [DOMDimensions]="{ w: 700, h: 350}" [nodes]="nodes" [edges]="edges" [layout]="layout"></loom>
+<div style="width: 100vw; height: 100vh; background: #f4f4f4; display: flex; align-items: center;">
+    <div
+        style="width: 33vw; height: 100vh; background: #fff; display: flex; flex-direction: column; gap: 1em; border-right: 1px solid #bbb;">
+        <div>
+            <h1>Edit Display Settings</h1>
+            <!--Add a place to change graph settings-->
+        </div>
+        <div>
+            <h1>Create a Node</h1>
+
+            <!--Add place for node title input-->
+        </div>
+        <div>
+            <h1>Create an Edge</h1>
+            <!--
+                Two dropdowns for selecting nodes?
+                Or do something similar to course builder by making a click two nodes to draw connection. 
+            -->
+        </div>
+        <div>
+            <h1>Inspect</h1>
+            <!--Maybe a section to display node information-->
+        </div>
+    </div>
+
+    <div style="width: 77vw; height: 100vh; display:flex; justify-content: center; align-items: center;">
+        <loom style="background: #fff; border: 1px solid #bbb;" [DOMDimensions]="{ w: 700, h: 700}" [nodes]="nodes"
+            [edges]="edges" [layout]="layout"></loom>
+    </div>
+</div>
