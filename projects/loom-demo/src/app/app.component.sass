@@ -18,7 +18,7 @@
 
   & .createNodeSection,
   & .createEdgeSection,
-  & .updateNodeSection 
+  & .inspectElementSection 
     display: flex
     flex-direction: column
     margin-bottom: 0rem
@@ -39,15 +39,22 @@
       font-size: 0.7rem
       margin-bottom: 0.5rem
 
-    & select,
     & input,
     & button 
       margin-bottom: 1.5rem
 
 
+.loomPanel
+  width: 77vw
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+
+
 button
   font-family: inherit
-  background-color: #0000ff
+  background-color: #2222a3
   border: none
   padding: 0.7rem 1.4rem
   border-radius: 4px
@@ -55,8 +62,7 @@ button
   font-weight: 700
 
 
-input, 
-select 
+input
   font-family: inherit
   border-radius: 3px
   border: 1px solid #343434

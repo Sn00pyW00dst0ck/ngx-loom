@@ -24,22 +24,26 @@
         <div class="divider"></div>
 
         <!--Section For Displaying Information-->
-        <div class="updateNodeSection">
-            <h1>Update Element</h1>
+        <div class="inspectElementSection">
+            <h1>Inspect Element</h1>
             @if (!focusedElement) {
             <label>Click An Element To Update It</label>
             } @else if (isNode(focusedElement)) {
-            Node
-            } @else {
-            Edge
+            <label>ID: {{focusedElement.id}}</label>
+            <label>Label: {{focusedElement.label}}</label>
+            } @else if (isEdge(focusedElement)) {
+            <label>ID: {{focusedElement.id}}</label>
+            <label>Source ID: {{focusedElement.source}}</label>
+            <label>Target ID: {{focusedElement.target}}</label>
             }
             <!--Maybe a section to display node information-->
         </div>
     </div>
 
-    <div style="width: 77vw; height: 100vh; display:flex; justify-content: center; align-items: center;">
-        <loom style="background: #fff; border: 1px solid #bbb;" [DOMDimensions]="{ w: 700, h: 700}" [nodes]="nodes"
-            [edges]="edges" [layout]="layout" (nodeClicked)="onNodeClick($event)" (edgeClicked)="onEdgeClick($event)">
+    <div class="loomPanel">
+        <loom style="background: #ffffff; border: 1px solid #343434;" [DOMDimensions]="{ w: 700, h: 700}"
+            [nodes]="nodes" [edges]="edges" [layout]="layout" (nodeClicked)="onNodeClick($event)"
+            (edgeClicked)="onEdgeClick($event)">
         </loom>
     </div>
 </div>

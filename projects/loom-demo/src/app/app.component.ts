@@ -41,7 +41,7 @@ export class AppComponent {
   protected sourceNode: Node | null = null;
 
   // Properties needed to update elements
-  protected focusedElement: Node | Edge | null = null;
+  protected focusedElement: any = null;
 
   constructor(private fb: FormBuilder) {
     this.layout.settings = {
@@ -89,6 +89,8 @@ export class AppComponent {
   //#region Helper Methods
 
   protected isNode = (object: any): boolean => object instanceof Node;
+
+  protected isEdge = (object: any): boolean => object instanceof Edge;
 
   private addNode = (label: string): void => {
     const newNode = new Node();
