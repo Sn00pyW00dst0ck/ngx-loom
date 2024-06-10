@@ -11,8 +11,8 @@
     "test:demo:headless": "ng test --watch=false --browsers=ChromeHeadless loom-demo",
     "test:loom": "ng test ngx-loom",
     "test:loom:headless": "ng test --watch=false --browsers=ChromeHeadless ngx-loom",
-    "compodoc:build": "compodoc -p tsconfig.doc.json",
-    "compodoc:serve": "compodoc -p tsconfig.doc.json -s --port 5555 -w -o"
+    "compodoc:build": "compodoc -p ./projects/ngx-loom/tsconfig.doc.json -n 'ngx-loom documentation'",
+    "compodoc:serve": "compodoc -p ./projects/ngx-loom/tsconfig.doc.json -s --port 5555 -w -o -n 'ngx-loom documentation'"
   },
   "private": true,
   "dependencies": {
