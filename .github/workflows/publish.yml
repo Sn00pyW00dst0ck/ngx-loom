@@ -1,0 +1,63 @@
+# Based loosely on work found at: https://github.com/nextauthjs/next-auth/issues/226
+
+name: Publish
+
+# TODO: Look into how to prevent this workflow from running if loom workflow is failing currently.
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  # Logic to build and deploy Github pages docs
+  publish-gh-pages:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install Dependencies
+        run: |
+          npm ci
+
+      - name: Build Docs
+        run: |
+          npm run compodoc:build
+
+      - name: Deploy Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: documentation
+          clean: true
+
+  # Logic to publish to NPM repository
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          registry-url: https://registry.npmjs.org/
+      
+      - name: Install Dependencies
+        run: |
+          npm ci
+
+      - name: Build
+        run: |
+          npm run build:loom:prod
+
+      - name: Test
+        run: |
+          npm run test:loom:headless
+      
+      - name: Deploy NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

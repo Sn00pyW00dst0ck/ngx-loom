@@ -1,5 +1,5 @@
 {
-  "name": ".",
+  "name": "ngx-loom",
   "version": "0.0.0",
   "scripts": {
     "build:demo:dev": "ng build --configuration development loom-demo",
