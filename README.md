@@ -7,7 +7,7 @@
 
 ## Installation
 
-To install, utilize the npm command `COMMAND HERE`. 
+To install, utilize the command `npm i ngx-loom`. 
 
 ## Features
 
@@ -53,12 +53,13 @@ There are four npm scripts available to test ngx-loom and its demo application.
 
 ### Documentation
 
-Documentation for ngx-loom is created utilizing [Compodoc](https://compodoc.app/). There are two provided npm scripts to generate documentation. 
+Documentation for ngx-loom is created utilizing [Compodoc](https://compodoc.app/). There are two provided npm scripts to generate documentation, or you can view the docs at [this page](https://sn00pyw00dst0ck.github.io/ngx-loom/). 
 
 1. `compodoc:build` - Builds the documentation to a directory `/documentation`.
 2. `compodoc:serve` - Builds and serves the documentation to `localhost:5555`.
 
-*Note: Documentation is not generated for the loom-demo project, only ngx-loom.*
+> [!NOTE]
+> Documentation is not generated for the loom-demo project, only ngx-loom. Documentation is not 100% comprehensive, but will improve with time.
 
 #
 *This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.*
