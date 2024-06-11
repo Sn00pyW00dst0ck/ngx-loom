@@ -58,6 +58,8 @@ jobs:
           npm run test:loom:headless
       
       - name: Deploy NPM
-        run: npm publish
+        run: |
+          cd projects/ngx-loom
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
