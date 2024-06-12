@@ -1,24 +1,24 @@
-# NgxLoom
+# ngx-loom
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.0.
+**ngx-loom** is an Angular 17 compatible library with the sole purpose of easily rendering directed graph structures. 
+View the GitHub Repository here: (https://github.com/Sn00pyW00dst0ck/ngx-loom)[https://github.com/Sn00pyW00dst0ck/ngx-loom].
 
-## Code scaffolding
+## Installation
 
-Run `ng generate component component-name --project ngx-loom` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-loom`.
-> Note: Don't forget to add `--project ngx-loom` or else it will be added to the default project in your `angular.json` file. 
+To install, utilize the command `npm i ngx-loom`.
 
-## Build
+## Features
 
-Run `ng build ngx-loom` to build the project. The build artifacts will be stored in the `dist/` directory.
+**ngx-loom** currently provides the following features: 
 
-## Publishing
+1. Ability to render directed (or undirected) graph structures.
+2. Ability to overwrite the default node and edge display styles utilizing ng-templates.
+3. Ability to pan and zoom the displayed graph.
+4. Ability to implement custom 'layouts', which allows replacing the default rendering engine.
+5. Ability to bind to output events raised when a graph node or edge is clicked.
+6. Ability to center and auto-zoom the graph utilizing exposed methods.
 
-After building your library with `ng build ngx-loom`, go to the dist folder `cd dist/ngx-loom` and run `npm publish`.
+Documentation for the ngx-loom library can be found at (https://sn00pyw00dst0ck.github.io/ngx-loom/)[https://sn00pyw00dst0ck.github.io/ngx-loom/].
 
-## Running unit tests
-
-Run `ng test ngx-loom` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+#
+*This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.*
