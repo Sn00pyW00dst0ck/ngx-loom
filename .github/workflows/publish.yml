@@ -59,7 +59,7 @@ jobs:
       
       - name: Deploy NPM
         run: |
-          cd projects/ngx-loom
+          cd dist/ngx-loom
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
